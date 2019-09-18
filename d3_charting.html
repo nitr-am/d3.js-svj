@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>D3 and Scalable Vector Graphics</title>
 
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js" integrity="sha256-+9Mf3cAVmxxudDsr1XwXUeRZFtvdWVYdq5/vcgiYyNU=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 
 </head>
 
-<body style=m argin-left:20px>
+<body style= margin-left:20px>
     <h1>Data Visualisation</h1>
 
     <h2>D3 Charting</h2>
@@ -31,7 +31,10 @@
             450, 100, 160, 279, 500, 25, 350, 120, 80, 130,
             110, 102, 375, 200, 175, 168, 180, 230, 205,
         ];
-
+        
+        var scale = d3.scale.linear()
+                            .domain([0,500])
+                            .range([0, h])
 
         var colWidth = w / dataset.length; // A esto llego para tener abajo un codigo mas limpio. Es el ancho de c/ columna. 
         var barWidth = colWidth - barPadding; // Igual, para tenr un codigo mas limpio. Es el ancho de C/ barra. 
@@ -46,19 +49,20 @@
         
 
         svg.selectAll("rect") // selectAll significa seleccionar todos los rectangulos (esos datos are represented in rectangles.)
-            .data(dataset) // Getting the data from the dataset arow. 
+            .data(dataset) // Getting the data from the dataset arrow. 
             .enter() // Is to make every piece of data a new instance with the attributes that come below. 
             .append("rect") // Now I am attaching each new rectangle. (we are not creating a chart but a et of rectaangles with some data)
             .attr("x", function(d, i) {
                 return i * colWidth; // separates all the rectangles uniformally.
             }) // Here all the attributes of each "rect": X and Y coordinates. Height and width of each rectangle. 
             .attr("y", function(d) {
-                return h - d; // It is important to declare that x,y(0,0) start at the top left of the screen and go left & down. 
+                return h - scale(d); // It is important to declare that x,y(0,0) start at the top left of the screen and go left & down. 
             }) // according to above h-d, give the y start of the "rect" to below. To make the aligned at bottom.
             .attr("height", function(d) {
-                return d; // the size is the data. 
+                return scale(d); // the size is the data. 
             })
             .attr("width", barWidth) // Defined above. It is the colWidth - the barPadding. 
+            .attr("fill", "blue")
 
         // Now I am going to define the text inside of each one of the bars. Which I need to say the "data".
 
@@ -75,7 +79,7 @@
             }) // Esto para que el texto quede en la mitad de cada barra. 
             // i*colWidth llega hasta la barra deseada. + barWidth/2 me lleva hasta la mitad de esa barra deseada. 
             .attr("y", function(d) {
-                return h - d + 14; // Teniendo en cuenta que las Barras empiezan desde arriba, el + 14 es para que el texto quede un poquito 
+                return h - scale(d) + 14; // Teniendo en cuenta que las Barras empiezan desde arriba, el + 14 es para que el texto quede un poquito 
             }) // abajo del final de la barra. 
             .attr("font-family", "sans-serif") // Mas atributos del texto. 
             .attr("font-size", "11px")
