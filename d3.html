@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>D3 and Scalable Vector Graphics</title>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+</head>
+
+<body>
+    <h1>Data Visualisation</h1>
+
+    <h2>D3 and Scalable Vector Graphics</h2>
+
+    <div id="draw-here"></div>
+
+    <script>
+    var w = 500;
+    var h = 200;
+    var data = [40, 50, 10, 30, 20];
+    //Create SVG element
+    var svg = d3.select("#draw-here")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+    svg.selectAll("circle") // This will select all the data in this case cicles that are generated. This binds to data. 
+        .data(data) // Here we pass the array defined on line 24 to this data function.
+        .enter() // This enter is to bind the data above into the circles we are about to create. 
+        .append("circle") // So we are going to create a circle for each data entry in the array. 
+        // The "x" value for each one will be set programatically. as shown below.
+        .attr("cx", function (d, i) { // Anonimou funciton that can take one or 2 parameters. d is the data of the array and i is the index no. in the array.
+            return 50 + (i * 100);
+        }) 
+        // Here the Y coordenate splits the height of the viewport in 2. And sets in the middle.
+        .attr("cy", h / 2)
+        // Here we define the radious of the circles. Which has been defined on the array. 
+        .attr("r", function (d) {
+            return d;
+        });
+    </script>
+
+</html>

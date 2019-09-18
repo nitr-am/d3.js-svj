@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>D3 and Scalable Vector Graphics</title>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js" integrity="sha256-+9Mf3cAVmxxudDsr1XwXUeRZFtvdWVYdq5/vcgiYyNU=" crossorigin="anonymous"></script>
+
+</head>
+
+<body style=m argin-left:20px>
+    <h1>Data Visualisation</h1>
+
+    <h2>D3 Charting</h2>
+
+    <button onclick="change_data()">Change Data</button>
+    <button onclick="filter_data()">Filtered Data</button>
+    <input type=text id="filter_value" placeholder="Minimum required (100)" />
+    <br><br>
+
+    <div id="draw-here"></div>
+
+    <script>
+        var w = 500; // Width of chart container
+        var h = 500; // Height of chart container
+        var barPadding = 1;
+        var dataset = [
+            450, 100, 160, 279, 500, 25, 350, 120, 80, 130,
+            110, 102, 375, 200, 175, 168, 180, 230, 205,
+        ];
+
+
+        var colWidth = w / dataset.length; // A esto llego para tener abajo un codigo mas limpio. Es el ancho de c/ columna. 
+        var barWidth = colWidth - barPadding; // Igual, para tenr un codigo mas limpio. Es el ancho de C/ barra. 
+        // La diferencia entre columnas y barras es que la columna incluye el barPaddig que es lo que separa barra y barra. 
+
+
+        var svg = d3.select("#draw-here") // Aqui selecciono y junto el d3 con el div donde voy a hacer el chart. /#draw-here
+            .append("svg") // Pego el "svg" que estoy creando. 
+            .attr("height", h) // Los atributos son las caracteristicas de el svg. Estan definidos arriba. Dimensiones.
+            .attr("width", w);
+
+        
+
+        svg.selectAll("rect") // selectAll significa seleccionar todos los rectangulos (esos datos are represented in rectangles.)
+            .data(dataset) // Getting the data from the dataset arow. 
+            .enter() // Is to make every piece of data a new instance with the attributes that come below. 
+            .append("rect") // Now I am attaching each new rectangle. (we are not creating a chart but a et of rectaangles with some data)
+            .attr("x", function(d, i) {
+                return i * colWidth; // separates all the rectangles uniformally.
+            }) // Here all the attributes of each "rect": X and Y coordinates. Height and width of each rectangle. 
+            .attr("y", function(d) {
+                return h - d; // It is important to declare that x,y(0,0) start at the top left of the screen and go left & down. 
+            }) // according to above h-d, give the y start of the "rect" to below. To make the aligned at bottom.
+            .attr("height", function(d) {
+                return d; // the size is the data. 
+            })
+            .attr("width", barWidth) // Defined above. It is the colWidth - the barPadding. 
+
+        // Now I am going to define the text inside of each one of the bars. Which I need to say the "data".
+
+        svg.selectAll("text") // This is the first step to create a chart. 
+            .data(dataset) // Also the informaiton comes from the dataset (the text comes from it). )
+            .enter() // reating each instance. 
+            .append("text") // Appending text to each instance
+            .text(function(d) { // As I said I need my "text" to be the data of the "dataset". 
+                return d; // What is d, is the data inside the dataset. 
+            })
+            .attr("text-anchor", "middle") // I need to text to go in the middle. 
+            .attr("x", function(d, i) { // x coordinate. 
+                return i * colWidth + barWidth / 2; // Al mismo ancho establecido arriba (el de cada barra, le agrego el de la barra/2.)
+            }) // Esto para que el texto quede en la mitad de cada barra. 
+            // i*colWidth llega hasta la barra deseada. + barWidth/2 me lleva hasta la mitad de esa barra deseada. 
+            .attr("y", function(d) {
+                return h - d + 14; // Teniendo en cuenta que las Barras empiezan desde arriba, el + 14 es para que el texto quede un poquito 
+            }) // abajo del final de la barra. 
+            .attr("font-family", "sans-serif") // Mas atributos del texto. 
+            .attr("font-size", "11px")
+            .attr("fill", "white");
+    </script>
+</body>
+
+</html>
