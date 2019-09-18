@@ -33,7 +33,7 @@
         ];
         
         var scale = d3.scale.linear()
-                            .domain([0,500])
+                            .domain([0,d3.max(dataset)])
                             .range([0, h])
 
         var colWidth = w / dataset.length; // A esto llego para tener abajo un codigo mas limpio. Es el ancho de c/ columna. 
